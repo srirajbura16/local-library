@@ -10,6 +10,15 @@ const coolUserRouter = require('./routes/cool');
 
 var app = express();
 
+//set up mongoose connection
+const mongoose = require('mongoose');
+const mongoDB =
+  'mongodb+srv://local-library:deved123@cluster0.vyhb8.mongodb.net/local_library?retryWrites=true&w=majority';
+
+mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
+const db = mongoose.connection;
+db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
