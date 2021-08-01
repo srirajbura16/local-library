@@ -10,7 +10,7 @@ const AuthorSchema = new Schema({
 });
 
 //Virtual: author's full name
-AuthorSchema.virtual.get('name')(function () {
+AuthorSchema.virtual('name').get(function () {
   return this.family_name + ', ' + this.first_name;
 });
 
