@@ -5,10 +5,10 @@ block content
 
   ul
     each author in author_list
-    if author
       li
         a(href=author.url) #{author.name}
-        |  (#{author.lifespan})
+        if author.lifespan !== ' - '
+          span (#{author.lifespan})
 
     else
       li There are no authors.
