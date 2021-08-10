@@ -1,2 +1,3 @@
 /node_modules
 mDB-connection-string
+.env
