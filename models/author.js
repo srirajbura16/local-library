@@ -17,9 +17,19 @@ AuthorSchema.virtual('name').get(function () {
 
 // Virtual for author's lifespan
 AuthorSchema.virtual('lifespan').get(function () {
-  return this.date_of_birth
-    ? DateTime.fromJSDate(this.date_of_birth).toLocaleString(DateTime.DATE_MED)
-    : '';
+  const birthDate = DateTime.fromJSDate(this.date_of_birth).toLocaleString(
+    DateTime.DATE_MED
+  );
+  let deathDate = DateTime.fromJSDate(this.date_of_death).toLocaleString(
+    DateTime.DATE_MED
+  );
+  deathDate == 'Invalid DateTime' ? (deathDate = 'present') : deathDate;
+
+  if (this.date_of_birth) {
+    return birthDate + ' - ' + deathDate;
+  } else {
+    return '';
+  }
 });
 
 // Virtual for author's URL
