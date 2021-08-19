@@ -228,7 +228,38 @@ exports.book_delete_get = function (req, res, next) {
 
 // Handle book delete on POST.
 exports.book_delete_post = function (req, res) {
-  res.send('NOT IMPLEMENTED: Book delete POST');
+  async.parallel(
+    {
+      book: function (callback) {
+        Genre.findById(req.params.id).exec(callback);
+      },
+      bookinstances: function (callback) {
+        BookInstance.find({ book: req.params.id }).exec(callback);
+      },
+    },
+    function (err, results) {
+      if (err) {
+        return next(err);
+      }
+      if (results.book_instances) {
+        res.render('book_delete', {
+          title: 'Delete Book',
+          book: results.book,
+          bookinstances: results.bookinstances,
+        });
+        return;
+      } else {
+        // Genre has no books. Delete object and redirect to the list of genres.
+        Book.findByIdAndRemove(req.body.bookid, function deleteGenre(err) {
+          if (err) {
+            return next(err);
+          }
+          // Success - go to author list
+          res.redirect('/catalog/books');
+        });
+      }
+    }
+  );
 };
 
 // Display book update form on GET.
